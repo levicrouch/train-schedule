@@ -80,3 +80,19 @@ $(formData.submitButton).click(function () {
     });
     formData.clear();
 });
+// Firebase watcher + initial loader HINT: This code behaves similarly to .on("value")
+database.ref().on("child_added", function (snapshot) {
+
+    // Log everything that's coming out of snapshot
+    console.log("From database: snapshot.val().trainName", snapshot.val().trainName);
+    console.log(snapshot.val().destination[0]);
+    console.log(snapshot.val().firstTrain[0]);
+    console.log(snapshot.val().frequency[0]);
+    console.log(snapshot.val().dateAdded[0]);
+
+      // Write values from database to the html document
+      $(output.trainName).text(snapshot.val().trainName);
+      
+
+      // Handle the errors
+});
