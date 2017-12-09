@@ -1,21 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-us">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    
-    <!-- Adding jquery 3.2.1 reference -->
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <title>CoderBay</title>
 
-    <!-- Linking style.css -->
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-    
+    <!-- Bootstrap CDN-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    <title>Train Schedule</title>
+    <!-- Firebase Reference -->
+    <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
+
 </head>
+
 <body>
-    
+
+    <div class="container">
+
+        <br>
+
+        <!-- Jumbotron Title -->
+        <div class="jumbotron">
+            <h1 class="text-center">Terry Tate's Pain Train Schedule</h1>
+            <p class="text-center">The pain train's comin'! Whooo! Whooo!</p>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Current Pain Train Schedule</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table>
+                            <tr>
+                                <th>Train Name</th>
+                                <th>Destination</th>
+                                <th>Frequency (min)</th>
+                                <th>Next Arrival</th>
+                                <th>Minutes Away</th>
+                                <th>Upon arrival</th>
+                            </tr>
+
+                            <tr>
+                                <td class="data-train-name">Pain</td>
+                                <td class="data-destination">Doug</td>
+                                <td class="data-frequency">as often as it takes</td>
+                                <td class="data-next-arrival">18:00</td>
+                                <td class="data-minutes-away">10</td>
+                                <td class="data-upon-arrival"><img src="assets/images/pain-train-200.gif"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Add Train</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label for="form-train-name">Train Name</label>
+                            <input class="form-control" id="form-train-name" type="text">
+                            <label for="form-destination">Destination</label>
+                            <input class="form-control" id="form-destination" type="text">
+                            <label for="form-first-train">First Train Time (HH:MM - military time)</label>
+                            <input class="form-control" id="form-first-train" type="text">
+                            <label for="form-frequency">Frequency (min)</label>
+                            <input class="form-control" id="form-frequency" type="number">
+                        </div>
+                        <button class="btn btn-primary" id="submit" type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Script -->
+    <script src="app.js"></script>
+
 </body>
+
 </html>
