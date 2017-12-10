@@ -91,30 +91,44 @@ $(formData.submitButton).click(function () {
 ///////////////////////////////////////////////////////////////
 database.ref().on("child_added", function (snapshot) {
 
-    // Write values from database to the html document
+    
     // Determine the current time in military time
-    var displayCurrentTime = moment().toString();
-    // console.log("Moment:", displayCurrentTime);
-
-
     var calculatedCurrentTime = moment.utc(moment().format("HH:mm"));
-    var firstTrainTime = moment.utc("06:30", "HH:MM");
-    // var duration = moment.duration(calculatedCurrentTime.diff(firstTrainTime));
-    var duration = moment.duration(firstTrainTime.diff(calculatedCurrentTime));
-    var s = moment.utc(+duration).format("HH:mm");
-    console.log("duration.minutes", duration.minutes);
-    console.log("s", s);
+    console.log("calculatedCurrentTime:", calculatedCurrentTime);
 
-    // Calculate the next arrival time based on values of frequency and first train values
-    var nextArrival = "10:00am";
-    // Calculate the minutes away based on current time and next arrival times
-    var minutesAway = 10;
+    // convert the frequency to a number
+    var frequency = parseInt(snapshot.val().frequency);
+    console.log("frequency:", frequency);
+
+    // Convert the first train time to a moment object so we can run calculations
+    var firstTrainTime = snapshot.val().firstTrain;
+    var firstTrainTimeCalculated = moment(firstTrainTime,"HH:mm").subtract(1, "years");
+    console.log("firstTrainTimeCalculated:", firstTrainTimeCalculated);
+    
+    // Calculate the difference from the current time to the time the first train left
+    var diffTime = moment().diff(moment(firstTrainTimeCalculated), "minutes");
+    console.log("diffTime:", diffTime);
+    
+    // Time apart (remainder)
+    var timeRemainder = diffTime % frequency;
+    console.log(timeRemainder);
+
+    // Minutes until next train arrives
+    var minutesNextTrain = frequency - timeRemainder;
+    console.log("minutesNextTrain:" , minutesNextTrain);
+    
+    // Next Train
+    var nextArrival = moment().add(minutesNextTrain, "minutes");
+    // nextArrival = JSON.stringify(nextArrival);
+    console.log("nextArrival:", moment(nextArrival).format("HH:mm"));
+
+    // Write values from database to the html document
     $(output.trainData).find("tbody").append($("<tr>").append
         ($("<td>").append(snapshot.val().trainName),
         $("<td>").append(snapshot.val().destination),
         $("<td>").append(snapshot.val().frequency),
-        $("<td>").append(nextArrival),
-        $("<td>").append(minutesAway),
+        $("<td>").append(moment(nextArrival).format("HH:mm")),
+        $("<td>").append(minutesNextTrain),
         $("<td>").append("<img class='expectation' src='assets/images/pain-train-200.gif'>")
         )
     );
