@@ -38,7 +38,10 @@ var output = {
     frequency: ".data-frequency",
     nextArrival: ".data-next-arrival",
     minutesAway: ".data-minutes-away",
-    uponArrival: ".data-upon-arrival"
+    expectation: ".expectation",
+    easterEgg: "#embed-video",
+    jumbotron: ".jumbotron",
+    body: "body"
 }
 // userData object
 var formData = {
@@ -55,9 +58,12 @@ var formData = {
         $(input.frequency).val('');
     }
 }
+
+$(output.easterEgg).hide();
 ///////////////////////////////////////////////////////////////
 // Enter Data from form to Firebase
 ///////////////////////////////////////////////////////////////
+
 // aftter hitting submit, capture user supplied data
 $(formData.submitButton).click(function () {
     // Prevent the buttons default behavior
@@ -91,7 +97,7 @@ $(formData.submitButton).click(function () {
 ///////////////////////////////////////////////////////////////
 database.ref().on("child_added", function (snapshot) {
 
-    
+
     // Determine the current time in military time
     var calculatedCurrentTime = moment.utc(moment().format("HH:mm"));
     console.log("calculatedCurrentTime:", calculatedCurrentTime);
@@ -102,21 +108,21 @@ database.ref().on("child_added", function (snapshot) {
 
     // Convert the first train time to a moment object so we can run calculations
     var firstTrainTime = snapshot.val().firstTrain;
-    var firstTrainTimeCalculated = moment(firstTrainTime,"HH:mm").subtract(1, "years");
+    var firstTrainTimeCalculated = moment(firstTrainTime, "HH:mm").subtract(1, "years");
     console.log("firstTrainTimeCalculated:", firstTrainTimeCalculated);
-    
+
     // Calculate the difference from the current time to the time the first train left
     var diffTime = moment().diff(moment(firstTrainTimeCalculated), "minutes");
     console.log("diffTime:", diffTime);
-    
+
     // Time apart (remainder)
     var timeRemainder = diffTime % frequency;
     console.log(timeRemainder);
 
     // Minutes until next train arrives
     var minutesNextTrain = frequency - timeRemainder;
-    console.log("minutesNextTrain:" , minutesNextTrain);
-    
+    console.log("minutesNextTrain:", minutesNextTrain);
+
     // Next Train
     var nextArrival = moment().add(minutesNextTrain, "minutes");
     // nextArrival = JSON.stringify(nextArrival);
@@ -132,4 +138,8 @@ database.ref().on("child_added", function (snapshot) {
         $("<td>").append("<img class='expectation' src='assets/images/pain-train-200.gif'>")
         )
     );
+});
+$(output.trainData).click(function () {
+    $(output.jumbotron).hide();
+    $(output.easterEgg).show();
 });

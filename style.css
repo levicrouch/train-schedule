@@ -2,7 +2,7 @@
     background-image: url("assets/images/terry-tate-office-linebacker.jpg");
     color: white;
     height: 480px;
-    width: 720;
+    /* width: 720; */
     background-repeat: no-repeat;
     background-color: rgb(168, 78, 90);
     padding-top: 211px;
@@ -17,4 +17,7 @@ th tr {
 }
 .expectation{
     height: 50px;
+}
+body {
+    background-color: black;
 }
