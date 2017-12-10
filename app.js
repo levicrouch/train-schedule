@@ -55,6 +55,9 @@ var formData = {
         $(input.frequency).val('');
     }
 }
+///////////////////////////////////////////////////////////////
+// Enter Data from form to Firebase
+///////////////////////////////////////////////////////////////
 // aftter hitting submit, capture user supplied data
 $(formData.submitButton).click(function () {
     // Prevent the buttons default behavior
@@ -79,14 +82,29 @@ $(formData.submitButton).click(function () {
         frequency: formData.frequency,
         dateAdded: firebase.database.ServerValue.TIMESTAMP
     });
+    // Clear out the form data
     formData.clear();
 });
-// Firebase watcher + initial loader HINT: This code behaves similarly to .on("value")
+
+///////////////////////////////////////////////////////////////
+// Load Data from Firebase
+///////////////////////////////////////////////////////////////
 database.ref().on("child_added", function (snapshot) {
 
     // Write values from database to the html document
     // Determine the current time in military time
-    var currentTime = "09:50";
+    var displayCurrentTime = moment().toString();
+    // console.log("Moment:", displayCurrentTime);
+
+
+    var calculatedCurrentTime = moment.utc(moment().format("HH:mm"));
+    var firstTrainTime = moment.utc("06:30", "HH:MM");
+    // var duration = moment.duration(calculatedCurrentTime.diff(firstTrainTime));
+    var duration = moment.duration(firstTrainTime.diff(calculatedCurrentTime));
+    var s = moment.utc(+duration).format("HH:mm");
+    console.log("duration.minutes", duration.minutes);
+    console.log("s", s);
+
     // Calculate the next arrival time based on values of frequency and first train values
     var nextArrival = "10:00am";
     // Calculate the minutes away based on current time and next arrival times
