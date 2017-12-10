@@ -8,6 +8,13 @@
     padding-top: 211px;
     padding-left: 100px;
 }
-td{
-    width: 16.66%;
+table{
+    width: 100%;
+    
+}
+th tr {
+    text-align: center;
+}
+.expectation{
+    height: 50px;
 }

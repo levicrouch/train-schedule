@@ -32,6 +32,7 @@ var input = {
 }
 // HTML output object
 var output = {
+    trainData: ".train-data",
     trainName: ".data-train-name",
     destination: ".data-destination",
     frequency: ".data-frequency",
@@ -83,16 +84,20 @@ $(formData.submitButton).click(function () {
 // Firebase watcher + initial loader HINT: This code behaves similarly to .on("value")
 database.ref().on("child_added", function (snapshot) {
 
-    // Log everything that's coming out of snapshot
-    console.log("From database: snapshot.val().trainName", snapshot.val().trainName);
-    console.log(snapshot.val().destination[0]);
-    console.log(snapshot.val().firstTrain[0]);
-    console.log(snapshot.val().frequency[0]);
-    console.log(snapshot.val().dateAdded[0]);
-
-      // Write values from database to the html document
-      $(output.trainName).text(snapshot.val().trainName);
-      
-
-      // Handle the errors
+    // Write values from database to the html document
+    // Determine the current time in military time
+    var currentTime = "09:50";
+    // Calculate the next arrival time based on values of frequency and first train values
+    var nextArrival = "10:00am";
+    // Calculate the minutes away based on current time and next arrival times
+    var minutesAway = 10;
+    $(output.trainData).find("tbody").append($("<tr>").append
+        ($("<td>").append(snapshot.val().trainName),
+        $("<td>").append(snapshot.val().destination),
+        $("<td>").append(snapshot.val().frequency),
+        $("<td>").append(nextArrival),
+        $("<td>").append(minutesAway),
+        $("<td>").append("<img class='expectation' src='assets/images/pain-train-200.gif'>")
+        )
+    );
 });
