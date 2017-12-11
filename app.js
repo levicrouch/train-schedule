@@ -41,7 +41,8 @@ var output = {
     expectation: ".expectation",
     easterEgg: "#embed-video",
     jumbotron: ".jumbotron",
-    body: "body"
+    body: "body",
+    glyphicon: ".glyphicon"
 }
 // userData object
 var formData = {
@@ -100,33 +101,29 @@ database.ref().on("child_added", function (snapshot) {
 
     // Determine the current time in military time
     var calculatedCurrentTime = moment.utc(moment().format("HH:mm"));
-    console.log("calculatedCurrentTime:", calculatedCurrentTime);
-
+    
     // convert the frequency to a number
     var frequency = parseInt(snapshot.val().frequency);
-    console.log("frequency:", frequency);
-
+    
     // Convert the first train time to a moment object so we can run calculations
     var firstTrainTime = snapshot.val().firstTrain;
     var firstTrainTimeCalculated = moment(firstTrainTime, "HH:mm").subtract(1, "years");
-    console.log("firstTrainTimeCalculated:", firstTrainTimeCalculated);
-
+    
     // Calculate the difference from the current time to the time the first train left
     var diffTime = moment().diff(moment(firstTrainTimeCalculated), "minutes");
-    console.log("diffTime:", diffTime);
-
+   
     // Time apart (remainder)
     var timeRemainder = diffTime % frequency;
-    console.log(timeRemainder);
-
+    
     // Minutes until next train arrives
     var minutesNextTrain = frequency - timeRemainder;
-    console.log("minutesNextTrain:", minutesNextTrain);
+   
 
     // Next Train
     var nextArrival = moment().add(minutesNextTrain, "minutes");
-    // nextArrival = JSON.stringify(nextArrival);
-    console.log("nextArrival:", moment(nextArrival).format("HH:mm"));
+
+    // capture the record's key data
+    key = Object.keys(snapshot.val());
 
     // Write values from database to the html document
     $(output.trainData).find("tbody").append($("<tr>").append
@@ -135,11 +132,30 @@ database.ref().on("child_added", function (snapshot) {
         $("<td>").append(snapshot.val().frequency),
         $("<td>").append(moment(nextArrival).format("HH:mm")),
         $("<td>").append(minutesNextTrain),
-        $("<td>").append("<img class='expectation' src='assets/images/pain-train-200.gif'>")
+        $("<td>").append("<img onclick='showEasterEgg()' class='expectation' data-easter-egg-status='hidden' src='assets/images/pain-train-200.gif'>"),
+        $("<td>").append("<button onclick='editRecord()' class='btn btn-primary glyphicon glyphicon-pencil' data-action='edit' aria-hidden='true'></button>"),
+        $("<td>").append("<button onclick='deleteRecord()' class='btn btn-primary glyphicon glyphicon-remove' data-action='delete' aria-hidden='true'></button>")
         )
     );
 });
-$(output.trainData).click(function () {
-    $(output.jumbotron).hide();
-    $(output.easterEgg).show();
-});
+function showEasterEgg() {
+    var easterEggStatus = $(output.expectation).attr("data-easter-egg-status");
+    if (easterEggStatus === "hidden") {
+        $(output.expectation).attr("data-easter-egg-status", "display");
+        $(output.jumbotron).hide();
+        $(output.easterEgg).show();
+    } else if (easterEggStatus === "display") {
+        $(output.expectation).attr("data-easter-egg-status", "hidden");
+        $(output.jumbotron).show();
+        $(output.easterEgg).hide();
+    }
+}
+
+function deleteRecord() {
+    console.log("now in deleteRecord function:");
+    console.log("Imagine that this record *disappeared*");
+}
+function editRecord() {
+    console.log("now in editRecord function:");
+    console.log("Imagine that this record *changed*");    
+}
